@@ -2,7 +2,11 @@ import { IMovie } from "data/models/IMovie";
 import { Movies } from "../data/schema/Movie.schema";
 
 export class MovieService {
-  async addMovie(movie): Promise<IMovie> {
+  async addMovie(movie: IMovie): Promise<IMovie> {
+    const exists = await Movies.findOne({ title: movie.title.toLowerCase() });
+
+    if (exists) throw new Error("movie with title already exists");
+    movie = { ...movie, title: movie.title.toLowerCase() };
     const savedMovie = await Movies.create(movie);
 
     return savedMovie.save();
@@ -26,7 +30,7 @@ export class MovieService {
     try {
       const movies = await Movies.find({
         title: { $regex: search, $options: "i" },
-      });
+      }).limit(100);
 
       if (!movies) throw new Error("No Movie");
       return movies;
@@ -38,7 +42,7 @@ export class MovieService {
     try {
       const movies = await Movies.find({
         genre: { $regex: search, $options: "i" },
-      });
+      }).limit(100);
 
       if (!movies) throw new Error("No Movie");
       return movies;

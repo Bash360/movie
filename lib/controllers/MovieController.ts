@@ -34,10 +34,13 @@ export class MovieController {
       if (error) {
         return res.status(400).json(error.message);
       }
+      try {
+        const movie = await this.movieService.addMovie(req.body);
 
-      const movie = await this.movieService.addMovie(req.body);
-
-      res.status(201).json(movie);
+        res.status(201).json(movie);
+      } catch (error) {
+        return res.status(400).json(error.message);
+      }
     });
   }
 
@@ -68,7 +71,7 @@ export class MovieController {
       try {
         const id = req.params.id;
         const movie = await this.movieService.findOne(id);
-
+        if (!movie) throw new Error('Movie with ID not found');
         res.status(200).json(movie);
       } catch (error) {
           return res.status(404).json(error.message);
