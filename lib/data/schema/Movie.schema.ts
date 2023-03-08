@@ -15,7 +15,7 @@ const Movies = mongoose.model(
       rated: { type: String, required: true, trim: true },
     },
     { autoIndex: false }
-  ).index({ title: "text" })
+  ).index({ title: "text", genre: "text" })
 );
 
 export { Movies };

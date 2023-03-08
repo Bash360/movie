@@ -22,16 +22,28 @@ export class MovieService {
     }
   }
 
-  async search(search: string): Promise<IMovie | object> {
+  async searchByTitle(search: string): Promise<IMovie | object> {
     try {
       const movies = await Movies.find({
-        $text: { $search: search, $caseSensitive: false },
+        title: { $regex: search, $options: "i" },
       });
 
       if (!movies) throw new Error("No Movie");
+      return movies;
     } catch (error) {
       return { message: "No Movie" };
     }
   }
+  async searchByGenre(search: string): Promise<IMovie | object> {
+    try {
+      const movies = await Movies.find({
+        genre: { $regex: search, $options: "i" },
+      });
 
+      if (!movies) throw new Error("No Movie");
+      return movies;
+    } catch (error) {
+      return { message: "No Movie" };
+    }
+  }
 }
