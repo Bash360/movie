@@ -42,5 +42,8 @@ Mark Bashir
 - open your terminal or cmd
 - run git clone <https://github.com/Bash360/movie>
 - run npm install to install dependencies
+- create a .env file add 
+MONGO_DB_URI='mongodb://localhost:27017/test'
+PORT=5000
 - run docker compose up -d  (install docker if not already installed)
 - run npm run dev to start application it listens on port 5000
