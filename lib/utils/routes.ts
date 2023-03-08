@@ -1,6 +1,6 @@
 export class Routes {
   //API VERSION
-  private static _V = "/v1";
+  private static _V = "/api/v1";
 
   //movie routes
 
