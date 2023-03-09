@@ -12,8 +12,13 @@ export class MovieService {
     return savedMovie.save();
   }
 
-  async findAll(skip: number, limit: number): Promise<IMovie[]> {
-    return Movies.find({}, { __v: 0,description:0,released:0,runtime:0,rated:0 }).limit(limit).skip(skip).exec();
+  async findAll(skip: number, limit: number): Promise<IMovie[] | object> {
+    const count = await Movies.find(
+      {}
+    ).count();
+    const movies = await Movies.find({}, { __v: 0, description: 0, released: 0, runtime: 0, rated: 0 }).limit(limit).skip(skip).exec();
+    
+    return {movies,count};
   }
 
   async findOne(id: string): Promise<IMovie | object> {
@@ -33,7 +38,7 @@ export class MovieService {
           title: { $regex: search, $options: "i" },
         },
         { __v: 0, description: 0, released: 0, runtime: 0, rated: 0 }
-      ).limit(100);
+      ).limit(10);
 
       if (!movies) throw new Error("No Movie");
       return movies;
@@ -48,7 +53,7 @@ export class MovieService {
           genre: { $regex: search, $options: "i" },
         },
         { __v: 0, description: 0, released: 0, runtime: 0, rated: 0 }
-      ).limit(100);
+      ).limit(10);
 
       if (!movies) throw new Error("No Movie");
       return movies;
